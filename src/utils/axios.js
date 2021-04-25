@@ -22,6 +22,12 @@ const axiosGet = async (type, param, page = 1) => {
     case 'movie':
       url = `movie/${param}?`
       break;
+    case 'credits': 
+      url = `movie/${param}/credits?`;
+      break;
+    case 'providers': 
+      url = `movie/${param}/watch/providers?`;
+      break;
     default:
       return { status: 500, data: {} };
   }

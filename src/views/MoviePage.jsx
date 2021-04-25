@@ -17,6 +17,7 @@ moment.locale('es');
 const MoviePage = ({ navigation, route }) => {
   const [title, setTitle] = React.useState('');
   const [movie, setMovie] = React.useState({});
+  const [casts, setCasts] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
@@ -30,10 +31,16 @@ const MoviePage = ({ navigation, route }) => {
 
     if (status == 200) {
       setMovie(data);
-      const response = await axiosGet('credits', route.params.id);
-      console.log(response.data);
+      _getCredits();
     }
     setLoading(false);
+  }
+
+  const _getCredits = async () => {
+    const { status, data } = await axiosGet('credits', route.params.id);
+    if (status == 200) {
+      setCasts(data.cast);
+    }
   }
 
   const _header = () => {
@@ -102,6 +109,40 @@ const MoviePage = ({ navigation, route }) => {
     );
   }
 
+  const _cardPeople = (cast, index) => {
+    return (
+      <View key={index}>
+        <View style={styles.cardPeople}>
+          <Image
+            source={cast.profile_path ?
+              { uri: 'https://image.tmdb.org/t/p/w300' + cast.profile_path } :
+              require('../assets/images/no-image-profile.png')
+            }
+            style={globalStyles.posterImage}
+          />
+        </View>
+        <Text 
+          style={styles.actorName}
+        >{cast.original_name}</Text>
+      </View>
+    );
+  }
+
+  const _actors = () => {
+    return (
+      <ScrollView
+        horizontal={true}
+        style={{ marginHorizontal: -10 }}
+      >
+        <View style={{ width: 15 }} />
+        { casts.map((cast, index) => (
+          _cardPeople(cast, index)
+        )) }
+        <View style={{ width: 15 }} />
+      </ScrollView>
+    );
+  }
+
   const _body = () => {
     return (
       <View style={styles.body}>
@@ -113,6 +154,11 @@ const MoviePage = ({ navigation, route }) => {
         <Text style={globalStyles.textDescription}>
           { movie.overview?.length > 0 ? movie.overview : 'Sin sinopsis.' }
         </Text>
+        <View style={{ height: 5 }} />
+        <Text style={globalStyles.textTitle}>Actores:</Text>
+        <View style={{ height: 5 }} />
+        { casts.lengt == 0 ? <Text style={globalStyles.textDescription}>Sin actores</Text> : _actors() }
+        <View style={{ height: 15 }} />
       </View>
     );
   }
@@ -179,6 +225,16 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap'
+  },
+  cardPeople: {
+    width: 120,
+    height: 200,
+    marginHorizontal: 7
+  },
+  actorName: {
+    paddingHorizontal: 10,
+    overflow: 'hidden',
+    height: 20
   },
 });
 
