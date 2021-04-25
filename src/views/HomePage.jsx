@@ -47,9 +47,13 @@ const HomePage = ({ navigation }) => {
         <ScrollView style={{ height }}>
           <View style={styles.containerCarroucel}>
             <Text style={globalStyles.textTitle}>Peliculas Populares</Text>
-            <ScrollView horizontal={true}>
+            <ScrollView horizontal={true} style={{ marginHorizontal: -10 }}>
               { loadingPopular && <LoadingComponent /> }
-              { moviesPopulars?.map(movie => <CardMovieComponent movie={movie} key={movie.id} navigation={navigation} />) }
+              <View style={{ width: 15 }} />
+              { moviesPopulars?.map(movie => 
+                <CardMovieComponent movie={movie} key={movie.id} navigation={navigation} />
+              )}
+              <View style={{ width: 15 }} />
             </ScrollView>
           </View>
           <Divider />

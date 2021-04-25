@@ -27,7 +27,6 @@ const MoviePage = ({ navigation, route }) => {
   const _fetch = async () => {
     setTitle(route.params.title);
     const { status, data } = await axiosGet('movie', route.params.id);
-    console.log(data);
 
     if (status == 200) {
       setMovie(data);
