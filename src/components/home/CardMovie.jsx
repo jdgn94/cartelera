@@ -22,7 +22,10 @@ const CardMovieComponent = ({ movie, navigation }) => {
       onPress={_movieDetails}
     >
       <Image
-        source={{ uri: 'https://image.tmdb.org/t/p/w300' + movie.poster_path }}
+        source={ movie.poster_path.length ? 
+          { uri: 'https://image.tmdb.org/t/p/w300' + movie.poster_path } :
+          require('../../assets/images/no-image-poster.png')
+        }
         style={globalStyles.posterImage}
       />
     </TouchableOpacity>

@@ -26,9 +26,13 @@ const MoviePage = ({ navigation, route }) => {
   const _fetch = async () => {
     setTitle(route.params.title);
     const { status, data } = await axiosGet('movie', route.params.id);
+    console.log(data);
 
-    if (status == 200)
+    if (status == 200) {
       setMovie(data);
+      const response = await axiosGet('credits', route.params.id);
+      console.log(response.data);
+    }
     setLoading(false);
   }
 
@@ -36,14 +40,20 @@ const MoviePage = ({ navigation, route }) => {
     return (
       <View style={styles.containerHeader}>
         <ImageBackground
-          source={ movie.backdrop_path && { uri: 'https://image.tmdb.org/t/p/w500' + movie.backdrop_path }}
+          source={ movie.backdrop_path ? 
+            { uri: 'https://image.tmdb.org/t/p/w500' + movie.backdrop_path } :
+            require('../assets/images/no-image.jpg')
+          }
           style={styles.imageBackground}
         />
 
         <View style={styles.header}>
           <View style={styles.imageContainer}>
             <Image
-              source={ movie.poster_path && { uri: 'https://image.tmdb.org/t/p/w300' + movie.poster_path }}
+              source={ movie.poster_path ? 
+                { uri: 'https://image.tmdb.org/t/p/w300' + movie.poster_path } :
+                require('../assets/images/no-image-poster.png')
+              }
               style={globalStyles.posterImage}
             />
           </View>

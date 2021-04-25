@@ -25,7 +25,10 @@ const ItemMovieComponent = ({ movie, navigation }) => {
       <View style={styles.itemBorder}>
         <View style={styles.image}>
           <Image 
-            source={{ uri: 'https://image.tmdb.org/t/p/w200' + movie.poster_path }}
+            source={ movie.poster_path ? 
+              { uri: 'https://image.tmdb.org/t/p/w200' + movie.poster_path } :
+              require('../../assets/images/no-image-poster.png')
+            }
             style={globalStyles.posterImage}
           />
         </View>
